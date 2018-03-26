@@ -1,0 +1,7 @@
+val salaireData = sc.textFile("/data/salaires.txt")
+val mappedData = salaireData.map(row =>(row.split(',')(0).toInt , row.split(',')(1), row.split(',')(2).toInt, row.split(',')(3).toInt))
+val salaireDf = mappedData.toDF("id","nom","salaire","naissance")
+salaireDf.registerTemTable("salaire") 
+val salData = salaireDf.groupBy("naissance").agg(avg("salaire").as("moy")).sort(asc("moy"))
+salData.map(row =>(row(0) + "\n"+row(1)))
+saData.saveAsTextFile("/hello/result")
